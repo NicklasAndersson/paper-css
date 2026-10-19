@@ -1,0 +1,19 @@
+name: Verify dependency update
+on:
+  pull_request:
+    paths:
+      - 'package-lock.json'
+      - 'package.json'
+      - '.github/workflows/verify-deps.yml'
+jobs:
+  npm-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm ls --depth=0
+      - run: npm run minify
